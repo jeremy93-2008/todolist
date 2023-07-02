@@ -1,6 +1,10 @@
 import { ITodoItem, ITodoListItem } from "../todolistGroup";
 
-export function getInboxTodoListGroup(todolist: ITodoItem[], search: string) {
+export function getInboxTodoListGroup(
+  todolist: ITodoItem[],
+  search: string,
+  badge: "all" | "uncompleted" | "completed"
+) {
   return todolist.reduce((acc, item) => {
     const date = item.createdAt;
     const dateKey = date.toDateString();
@@ -10,6 +14,12 @@ export function getInboxTodoListGroup(todolist: ITodoItem[], search: string) {
       !item.title.toLocaleLowerCase().includes(search.toLocaleLowerCase()) &&
       !item.description.toLocaleLowerCase().includes(search.toLocaleLowerCase())
     ) {
+      return acc;
+    }
+    if (badge === "completed" && !item.isComplete) {
+      return acc;
+    }
+    if (badge === "uncompleted" && item.isComplete) {
       return acc;
     }
     if (index === -1) {
