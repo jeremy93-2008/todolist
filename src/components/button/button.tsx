@@ -6,7 +6,7 @@ interface IButtonProps {
   selected?: boolean;
   variant?: "primary" | "secondary";
   title?: string;
-  onClick: () => void;
+  onClick: (evt: React.MouseEvent<Element, MouseEvent>) => void;
 }
 
 export function Button(props: IButtonProps) {

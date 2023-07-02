@@ -3,13 +3,15 @@ import { TodoItem } from "../todoItem/todoItem";
 import { isThisWeek, isToday } from "../../utils/date";
 import { useRecoilValue } from "recoil";
 import { stateAtom } from "../../atoms/state";
+import { ITodoItem } from "../../atoms/todolist";
 
 interface TodoItemListProps {
   item: ITodoListItem;
+  onEdit: (initialValue?: ITodoItem) => void;
 }
 
 export function TodoListItem(props: TodoItemListProps) {
-  const { item: todoListItem } = props;
+  const { item: todoListItem, onEdit } = props;
   const state = useRecoilValue(stateAtom);
 
   const isTodayAndStateToday =
@@ -28,7 +30,7 @@ export function TodoListItem(props: TodoItemListProps) {
       }
       <section className="mt-3">
         {todoListItem.items.map((todoItem) => (
-          <TodoItem key={todoItem.id} item={todoItem} />
+          <TodoItem key={todoItem.id} item={todoItem} onEdit={onEdit} />
         ))}
       </section>
     </section>

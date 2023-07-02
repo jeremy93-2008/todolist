@@ -6,10 +6,32 @@ import { TodoListItem } from "../../components/todoListItem/todoListItem";
 import { BadgesContainer } from "./components/badgesContainer";
 import { searchAtom } from "../../atoms/search";
 import { todolistGroupState } from "../../selectors/todolistGroup";
+import {
+  ITaskFormModalDefaultValues,
+  TaskFormModal,
+} from "./components/taskFormModal";
+import { useState } from "react";
+import { ITodoItem } from "../../atoms/todolist";
 
 export function Body() {
   const todoList = useRecoilValue(todolistGroupState);
   const search = useRecoilValue(searchAtom);
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [defaultValues, setDefaultValues] =
+    useState<ITaskFormModalDefaultValues | null>(null);
+
+  const onOpen = (todo?: ITodoItem) => {
+    setIsOpen(true);
+    if (!todo) return setDefaultValues(null);
+    setDefaultValues({
+      id: todo.id,
+      title: todo.title,
+      description: todo.description,
+      date: todo.createdAt.toLocaleDateString(),
+    });
+  };
+  const onClose = () => setIsOpen(false);
 
   return (
     <section className="flex flex-col flex-1 px-5 py-3">
@@ -17,7 +39,7 @@ export function Body() {
         <BadgesContainer />
         <section className="flex flex-col gap-3 mt-3">
           {todoList.map((todoListItem) => (
-            <TodoListItem item={todoListItem} />
+            <TodoListItem item={todoListItem} onEdit={onOpen} />
           ))}
           {todoList.length === 0 && search === "" && (
             <div className="flex flex-col flex-1 justify-center items-center mt-4">
@@ -42,7 +64,12 @@ export function Body() {
         className="flex-grow-0 basis-2"
         centerIcon={<FaPlus />}
         title="Añadir nueva tarea"
-        onClick={() => {}}
+        onClick={() => onOpen()}
+      />
+      <TaskFormModal
+        initialValues={defaultValues}
+        isOpen={isOpen}
+        onClose={onClose}
       />
     </section>
   );

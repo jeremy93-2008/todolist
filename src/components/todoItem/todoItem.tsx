@@ -1,18 +1,20 @@
 import { useRecoilState } from "recoil";
 import { ITodoItem, todolistAtom } from "../../atoms/todolist";
 import { useCallback } from "react";
-import { FaCheck } from "react-icons/fa";
+import { FaCheck, FaPen } from "react-icons/fa";
+import { Button } from "../button/button";
 
 interface TodoItemProps {
   item: ITodoItem;
+  onEdit: (initialValue?: ITodoItem) => void;
 }
 
 export function TodoItem(props: TodoItemProps) {
-  const { item: todo } = props;
+  const { item: todo, onEdit } = props;
 
   const [todoList, setTodoList] = useRecoilState(todolistAtom);
 
-  const handleClick = useCallback(() => {
+  const handleCompleteClick = useCallback(() => {
     const newTodoList = todoList.map((todoListItem) => {
       if (todoListItem.id !== todo.id) return todoListItem;
       return { ...todoListItem, isComplete: !todoListItem.isComplete };
@@ -20,10 +22,18 @@ export function TodoItem(props: TodoItemProps) {
     setTodoList(newTodoList);
   }, [todoList, setTodoList]);
 
+  const handleModalEditClick = useCallback(
+    (evt: React.MouseEvent<Element, MouseEvent>) => {
+      evt.stopPropagation();
+      onEdit(todo);
+    },
+    []
+  );
+
   return (
     <article
-      onClick={handleClick}
-      className="flex bg-red-100 p-4 pb-0 rounded-xl select-none cursor-pointer border-2 border-transparent hover:border-red-500"
+      onClick={handleCompleteClick}
+      className="relative flex bg-red-100 p-4 pb-0 rounded-xl select-none cursor-pointer border-2 border-transparent hover:border-red-500"
     >
       <div
         className={`flex justify-center items-center bg-red-300 rounded-full w-10 h-10 ${
@@ -57,6 +67,13 @@ export function TodoItem(props: TodoItemProps) {
           {todo.createdAt.toLocaleDateString()}
         </span>
       </section>
+      <Button
+        className="absolute top-2 right-2 border-transparent"
+        title="Editar esta tarea"
+        onClick={handleModalEditClick}
+        variant="secondary"
+        centerIcon={<FaPen />}
+      />
     </article>
   );
 }

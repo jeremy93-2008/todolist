@@ -1,4 +1,5 @@
-import { ITodoItem, ITodoListItem } from "../todolistGroup";
+import { ITodoItem } from "../../atoms/todolist";
+import { ITodoListItem } from "../todolistGroup";
 
 export function getInboxTodoListGroup(
   todolist: ITodoItem[],

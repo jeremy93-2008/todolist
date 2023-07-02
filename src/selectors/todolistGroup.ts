@@ -1,13 +1,6 @@
 import { selector } from "recoil";
 import { getTodoListGroupState } from "./getter/getTodoListGroupState";
-
-export type ITodoItem = {
-  id: number;
-  title: string;
-  description: string;
-  createdAt: Date;
-  isComplete: boolean;
-};
+import { ITodoItem } from "../atoms/todolist";
 
 export type ITodoListItem = {
   id: number;
