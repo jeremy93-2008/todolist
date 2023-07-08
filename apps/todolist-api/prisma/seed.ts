@@ -19,8 +19,10 @@ async function main() {
 
 
     [...Array(10)].map(async (e, i) => {
-        await prisma.todoItems.create({
-            data: {
+        await prisma.todoItems.upsert({
+            where: { id: i },
+            update: {},
+            create: {
                 title: fakerES.lorem.words(3),
                 description: fakerES.lorem.words(10),
                 isComplete: fakerES.datatype.boolean(),
