@@ -23,6 +23,7 @@
     "targets": {}
   },
   "workspaces": [
-    "apps/*"
+    "apps/todolist-app",
+    "apps/todolist-node-api"
   ]
 }
